@@ -16,11 +16,11 @@ Vous pouvez parcontre utiliser une librairie si vous souhaitez afficher des grap
 Les données d’apprentissage devront être lues dans un fichier texte du type csv. Vous devez donc
 également réaliser l’implémentation de cette partie.
 
-###Mise au point###
+### Mise au point
 En vue de sa mise au point, vous pourrez entrainer votre Perceptron sur des données simples
 (comme la porte logique ET).
 
-###Validation###
+### Validation 
 Une fois mis au point, on vous demande de tester votre implémentation sur les exemples du cours
 théorique :
 
