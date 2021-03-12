@@ -3,12 +3,12 @@ Projet du Q2 concernant les réseaux de neurones. Cours donné par M.Wagner (M1)
 
 Ce projet a pour but de vous familiariser avec les réseaux de neurones artificiels et leur
 apprentissage :
-• Perceptron simple
-• Perceptron utilisant la technique d’apprentissage de la descente du gradient
-• Perceptron utilisant la technique d’apprentissage ADALINE
-• Perceptron mono-couche (il s’agit d’un premier réseau de neurones travaillant en parallèle
-mais n’ayant aucune influence les uns sur les autres).
-• Perceptron multi-couches (algorithme de rétro-propagation de l’erreur)
+- Perceptron simple
+- Perceptron utilisant la technique d’apprentissage de la descente du gradient
+- Perceptron utilisant la technique d’apprentissage ADALINE
+- Perceptron mono-couche (il s’agit d’un premier réseau de neurones travaillant en parallèle mais n’ayant aucune influence les uns sur les autres).
+- Perceptron multi-couches (algorithme de rétro-propagation de l’erreur)
+
 Ce projet consiste donc à implémenter ces différentes techniques. Il vous est loisible de choisir le
 langage et le paradigme de programmation de votre choix. Il vous est néanmoins interdit d’utiliser
 une librairie dédiée aux réseaux de neurones. Vous devez donc tout implémenter « from scratch ».
@@ -16,29 +16,31 @@ Vous pouvez parcontre utiliser une librairie si vous souhaitez afficher des grap
 Les données d’apprentissage devront être lues dans un fichier texte du type csv. Vous devez donc
 également réaliser l’implémentation de cette partie.
 
-Mise au point
+###Mise au point
 En vue de sa mise au point, vous pourrez entrainer votre Perceptron sur des données simples
 (comme la porte logique ET).
-Validation
+
+###Validation
 Une fois mis au point, on vous demande de tester votre implémentation sur les exemples du cours
 théorique :
-Perceptron :
+
+**Perceptron :**
 - Opérateur logique ET (table 2.1 ou table 2.3) → mise au point
 - Classification de données linéaires séparables (table 2.9)
 - Classification de données non linéairement séparables (table 2.10)
 - Régression linéaire (table 2.11)
-Perceptron monocouche :
+**Perceptron monocouche :**
 - Classification à 3 classes (table 3.1)
 - Classification à 4 classes (table 3.5)
-Perceptron multicouche :
+**Perceptron multicouche :**
 - Opérateur logique XOR (table 4.3)
 - Classification à 2 classes non linéairement séparables (table 4.12)
 - Classification à 3 classes non linéairement séparables (table 4.14)
 - Régression non-linéaire (table 4.17)
-D’autres exemples
+*D’autres exemples*
 Finalement, on vous demande de trouver/imaginer plusieurs exemples concrets :
-• de classification
-• de régression
+- de classification
+- de régression
 Soyez imaginatif. A vous donc de créer des jeux de données adaptés ou de trouver des jeux de
 données qui pourraient correspondre à l’utilisation d’un Perceptron ou d’un réseau de neurones
 simple.
