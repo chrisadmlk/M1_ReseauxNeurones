@@ -29,9 +29,11 @@ théorique :
 - Classification de données linéaires séparables (table 2.9)
 - Classification de données non linéairement séparables (table 2.10)
 - Régression linéaire (table 2.11)
+
 **Perceptron monocouche :**
 - Classification à 3 classes (table 3.1)
 - Classification à 4 classes (table 3.5)
+
 **Perceptron multicouche :**
 - Opérateur logique XOR (table 4.3)
 - Classification à 2 classes non linéairement séparables (table 4.12)
