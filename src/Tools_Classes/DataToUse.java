@@ -10,21 +10,10 @@ public class DataToUse {
 	// classe pour regrouper toutes les infos utiles sur les datas utilisés
 	
 
-	/*  cas de figure possibles : 
-	 *	1000 = simple  -   2000 = monocouche   -   3000 = multicouche	
-	 *	100 = classification   -   200 = régression
-	 *	10 = descente du gradient   -   20 = ADALINE
-	 *	1 = exemple du cours   -   2 = autre exemple
-	 *
-	 *	ex : 	1121 = perceptron simple 		utilisé pour une classification 	selon la technique ADALINE, 					avec les datas de l'exemple du cours
-	 *			3112 = perecptron multicouche 	utilisé pour une classification 	selon la technique de la descente du gradient, 	avec des datas imaginées
-	 *
-	 */
-
 	
 	float[][] myData;  // matrice de float de dimensions inconnues
-	int cas;
-	
+	int cas;  // correspond au num des tables de data dans le cours
+	int nbColumn, nbLine;
 	
 	
 
@@ -34,17 +23,30 @@ public class DataToUse {
 		BufferedReader csvReader, csvReaderToCountLine;
 		int i = 0;
 
+		
+		if (path.equals("Datas\\table_2_3.csv")) cas = 203;
+		else if (path.equals("Datas\\table_2_9.csv")) cas = 209;
+		else if (path.equals("Datas\\table_2_10.csv")) cas = 210;
+		else if (path.equals("Datas\\table_2_11.csv")) cas = 211;
+		else if (path.equals("Datas\\table_3_1.csv")) cas = 301;
+		else if (path.equals("Datas\\table_3_5.csv")) cas = 305;
+		else if (path.equals("Datas\\table_4_12.csv")) cas = 412;
+		else if (path.equals("Datas\\table_4_14.csv")) cas = 414;
+		else if (path.equals("Datas\\table_4_17.csv")) cas = 417;
+		
+		//System.out.println(cas);
+		
 		try {
 			csvReader = new BufferedReader(new FileReader(path));
 			csvReaderToCountLine = new BufferedReader(new FileReader(path));
 			
 			// données nécessaires à l'initialisation du tableau du DataToUse
-			int nbColumn = (csvReaderToCountLine.readLine().split(",")).length;
-			int nbLine = (int) (csvReaderToCountLine.lines().count() + 1);
-			myData = new float[nbColumn][nbLine];
+			nbColumn = (csvReaderToCountLine.readLine().split(",")).length;
+			nbLine = (int) (csvReaderToCountLine.lines().count() + 1);
+			myData = new float[nbLine][nbColumn];
 			
 			while ((row = csvReader.readLine()) != null) {
-			    String[] data = row.split(",");  System.out.println(data[0] + data[1] + data[2]);
+			    String[] data = row.split(",");  //System.out.println(data[0] + data[1] + data[2]);
 			    
 			    for (int j = 0; j < nbColumn; j++) {
 			    	myData[i][j] = Float.parseFloat(data[j]);
@@ -59,6 +61,19 @@ public class DataToUse {
 	}
 	
 	
+	
+	public int GetColNb() {
+		return nbColumn;
+	}
+	
+	public int GetLineNb() {
+		return nbLine;
+	}
+
+	public float GetValueAt(int i, int j) {
+		return myData[i][j];
+	}
+
 	
 	
 }
