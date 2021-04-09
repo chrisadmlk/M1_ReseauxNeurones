@@ -11,7 +11,7 @@ public class DataToUse {
 	
 
 	
-	float[][] myData;  // matrice de float de dimensions inconnues
+	double[][] myData;  // matrice de float de dimensions inconnues
 	int cas;  // correspond au num des tables de data dans le cours
 	int nbColumn, nbLine;
 	
@@ -24,6 +24,7 @@ public class DataToUse {
 		int i = 0;
 
 		
+		if (path.equals("Datas\\table_2_1.csv")) cas = 201;
 		if (path.equals("Datas\\table_2_3.csv")) cas = 203;
 		else if (path.equals("Datas\\table_2_9.csv")) cas = 209;
 		else if (path.equals("Datas\\table_2_10.csv")) cas = 210;
@@ -43,7 +44,7 @@ public class DataToUse {
 			// données nécessaires à l'initialisation du tableau du DataToUse
 			nbColumn = (csvReaderToCountLine.readLine().split(",")).length;
 			nbLine = (int) (csvReaderToCountLine.lines().count() + 1);
-			myData = new float[nbLine][nbColumn];
+			myData = new double[nbLine][nbColumn];
 			
 			while ((row = csvReader.readLine()) != null) {
 			    String[] data = row.split(",");  //System.out.println(data[0] + data[1] + data[2]);
@@ -70,7 +71,7 @@ public class DataToUse {
 		return nbLine;
 	}
 
-	public float GetValueAt(int i, int j) {
+	public double GetValueAt(int i, int j) {
 		return myData[i][j];
 	}
 
