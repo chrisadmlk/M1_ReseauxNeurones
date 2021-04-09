@@ -14,7 +14,10 @@ public class DataToUse {
 	double[][] myData;  // matrice de float de dimensions inconnues
 	int cas;  // correspond au num des tables de data dans le cours
 	int nbColumn, nbLine;
-	
+	int nbIter;
+	int nbErr;
+	double errMoy;
+	double[] wFinal;
 	
 
 	
@@ -75,6 +78,49 @@ public class DataToUse {
 		return myData[i][j];
 	}
 
+	
+	public void SetLearningResult(int _nbIter, int _nbErr, double _errMoy, double[] _wFinal) {
+		nbIter = _nbIter;
+		nbErr = _nbErr;
+		errMoy = _errMoy;
+		wFinal = _wFinal;
+	}
+
+
+	public int getCas() {
+		return cas;
+	}
+
+	public int getNbErreur() {
+		return nbErr;
+	}
+
+
+
+	public int getNbColumn() {
+		return nbColumn;
+	}
+
+
+	public int getNbLine() {
+		return nbLine;
+	}
+
+	public int getNbIter() {
+		return nbIter;
+	}
+
+	public double getErrMoy() {
+		return errMoy;
+	}
+
+	public double[] getwFinal() {
+		return wFinal;
+	}
+
+
+
+	
 	
 	
 }
