@@ -98,6 +98,15 @@ public class Pereceptron_simple {
 	
 
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static void Technique_descente_gradient(DataToUse myData) {
 		
 		InputStream input;
@@ -145,7 +154,10 @@ public class Pereceptron_simple {
 			d[i] = myData.GetValueAt(i,nbCol-1);
 		}
 		 
-		// initialisation du tableau de x(i)
+		
+
+		
+		// initialisation du tableau de x(i)              TODO : ceci change dans le cas d'une régression
 		x = new double[k][nbCol];
 		for (int i = 0;  i < k; i++) {
 			x[i][0] = 1;
@@ -199,32 +211,22 @@ public class Pereceptron_simple {
 				w[j] = w[j] + dw[j];
 			}
 			
-			// évalution des sorties puis de l'erreur quadratique
-			errMoy = 0;
 			
-			for (int i = 0; i < k; i++) {
-				y[i] = 0;
-				for (int j = 0; j< nbCol ; j++) {
-					y[i] = y[i] + w[j] * x[i][j];  
-				}  
-				e[i] = d[i] - y[i];
-				
-				if ((d[i]>=0) && (y[i]<0)) nbErreur++;
-				else if ((d[i]<0) && (y[i]>=0)) nbErreur++;
-				
-				errMoy = errMoy + (e[i]) *  (e[i])   ;
-			}
+			double[] result = CalculateErrMoy(myData, k, nbCol, y, w, x, d, nbErreur);
+			errMoy = result[0];
+			nbErreur = (int)result[1];
 
-			errMoy =  (errMoy / (2*k) );   
-
+			
 			nbIter++;
 		
-		}   while(  (nbIter != nbIterMax) && (nbErreur!=0) ); 
-		
+			
+		}   while( ! (TestSortieBoucle(myData, nbIter, nbIterMax, errMoy, errLim, nbErreur)) );
 		     // TODO Dans le cas d'une classification, cette condition devient :     while(  (nbIter != nbIterMax) && (nbErreur!=0) ); 
 		
 		
+		System.out.println(errMoy  + "   /   " + errLim);
 		System.out.println("NB Iter = " +nbIter);
+		
 		myData.SetLearningResult(nbIter, nbErreur, errMoy, w);
 		
 	}
@@ -253,13 +255,13 @@ public class Pereceptron_simple {
         
        
 
-		double[] w; 							// vecteur de poids synaptique
+		double[] w; 						// vecteur de poids synaptique
 		double[] dw; 						// vecteur des modifications à apporter aux poids synaptiques
 		int k = myData.GetLineNb(); 		// nb d'exemples à itérer
 		int nbCol = myData.GetColNb(); 
-		double p=0; 							// potentiel (ne sert pas ici)
+		double p=0; 						// potentiel (ne sert pas ici)
 		double[] y;							// tableaux des sorties
-		double[] e; 							// tableau d'erreur locales
+		double[] e; 						// tableau d'erreur locales
 		double errMoy;						// erreur moyenne
 		
 		double[] d;							// 	valeur attendue d du cours = myData.GetValueAt(x, nbCol)
@@ -335,10 +337,75 @@ public class Pereceptron_simple {
 				
 			}
 			
-
 			
 			// évalution des sorties puis de l'erreur quadratique
-			errMoy = 0;
+			double[] result = CalculateErrMoy(myData, k, nbCol, y, w, x, d, nbErreur);
+			errMoy = result[0];
+			nbErreur = (int)result[1];
+			
+
+			nbIter++;
+
+			
+		}  while( ! (TestSortieBoucle(myData, nbIter, nbIterMax, errMoy, errLim, nbErreur)) );
+		
+		
+		System.out.println(errMoy  + "   /   " + errLim);
+		System.out.println("NB Iter = " +nbIter);
+		
+		myData.SetLearningResult(nbIter, nbErreur, errMoy, w);
+		
+	}
+	
+	
+	
+	
+	
+	public static boolean TestSortieBoucle(DataToUse myData, int nbIter, int nbIterMax, double errMoy, double errLim, int nbErreur) {
+		
+		int cas = myData.getCas();
+		
+		if ((cas == 211) || (cas == 417)) {
+			if (nbIter == nbIterMax) return true;
+			if (errMoy < errLim) return true;
+		}
+		
+		else if (cas == 210) {
+			if (nbIter == nbIterMax) return true;
+			if (nbErreur == 3) return true;
+		}
+		
+		else {
+			if (nbIter == nbIterMax) return true;
+			if (nbErreur == 0) return true;
+		}
+
+		return false;
+		
+	}
+	
+	
+	
+	
+	public static double[] CalculateErrMoy(DataToUse myData, int k,  int nbCol, double y[], double w[], double x[][], double d[], int nbErreur) {  
+		int cas = myData.getCas();
+		double errMoy = 0;
+		double[] rep = new double[2];
+		double partialErr=0;
+		
+		if ((cas == 211) || (cas == 417)) {
+			
+			for (int i = 0; i < k; i++) {
+				for (int j = 0; j< nbCol-1 ; j++) {
+					partialErr = d[i] - w[0] - w[j+1]*x[i][1];    // TODO : vérifier valeurs
+				}  
+				errMoy = errMoy + partialErr * partialErr;
+			}
+			errMoy =  (errMoy / (2*k) );   
+		}
+
+
+		else {
 			
 			for (int i = 0; i < k; i++) {
 				y[i] = 0;
@@ -351,17 +418,14 @@ public class Pereceptron_simple {
 				else if ((d[i]<0) && (y[i]>=0)) nbErreur++;
 			}
 			errMoy =  (errMoy / (2*k) );   
-			
+		}
 
-			nbIter++;
-		
-		}  while(  (nbIter != nbIterMax) && (errMoy > errLim) );     // TODO Dans le cas d'une classification, cette condition devient :     while(  (nbIter != nbIterMax) && (nbErreur!=0) ); 
-		
-		
-		System.out.println("NB Iter = " +nbIter);
-		myData.SetLearningResult(nbIter, nbErreur, errMoy, w);
-		
+		rep[0] = errMoy;
+		rep[1] = nbErreur;
+		return rep;
 	}
+	
+
 	
 	
 }
