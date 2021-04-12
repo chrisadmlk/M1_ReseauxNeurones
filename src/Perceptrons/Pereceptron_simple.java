@@ -97,15 +97,7 @@ public class Pereceptron_simple {
 	}
 	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	public static void Technique_descente_gradient(DataToUse myData) {
 		
@@ -365,7 +357,7 @@ public class Pereceptron_simple {
 		
 		int cas = myData.getCas();
 		
-		if ((cas == 211) || (cas == 417)) {
+		if ((cas == 211) || (cas == 417) || (cas == 301) || (cas == 305)) {      // Les cas sont ajouté ici en fonction du cours, et non selon une classification logique
 			if (nbIter == nbIterMax) return true;
 			if (errMoy < errLim) return true;
 		}

@@ -19,7 +19,16 @@ public class DataToUse {
 	double errMoy;
 	double[] wFinal;
 	
+	
+	public DataToUse() {
 
+	}
+	
+	public DataToUse(int _cas, int _nbColumn, int _nbLine) {
+		cas = _cas;
+		nbColumn = _nbColumn;
+		nbLine = _nbLine;
+	}
 	
 	public void LoadDataFromCSV(String path) {
 		String row;
@@ -65,7 +74,11 @@ public class DataToUse {
 	}
 	
 	
+	public void CreateDataTable(int nbLine, int nbCol) {
+		myData = new double[nbLine][nbCol];
+	}
 	
+
 	public int GetColNb() {
 		return nbColumn;
 	}
@@ -76,6 +89,10 @@ public class DataToUse {
 
 	public double GetValueAt(int i, int j) {
 		return myData[i][j];
+	}
+
+	public void SetValueAt(int i, int j, double val) {
+		myData[i][j] = val;
 	}
 
 	

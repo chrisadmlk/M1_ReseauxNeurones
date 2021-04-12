@@ -1,4 +1,5 @@
 import GUI.Main_Frame;
+import Perceptrons.Pereceptron_monocouche;
 import Perceptrons.Pereceptron_simple;
 import Tools_Classes.DataToUse;
 
@@ -42,15 +43,26 @@ public class main
 //    	Pereceptron_simple.Technique_ADALINE(myData7);
 //
 //    	// test 2.11 descente de gradient
-    	DataToUse myData8 = new DataToUse();
-    	myData8.LoadDataFromCSV("Datas\\table_2_11.csv");	
-    	Pereceptron_simple.Technique_descente_gradient(myData8);
+//    	DataToUse myData8 = new DataToUse();
+//    	myData8.LoadDataFromCSV("Datas\\table_2_11.csv");	
+//    	Pereceptron_simple.Technique_descente_gradient(myData8);
+//    	
+//    	// test 2.11 ADALINE
+//    	DataToUse myData9 = new DataToUse();
+//    	myData9.LoadDataFromCSV("Datas\\table_2_11.csv");	
+//    	Pereceptron_simple.Technique_ADALINE(myData9);
+//    	
+//    	
+//    	// test 3.1 ADALINE (monocouche)
+//    	DataToUse myData10 = new DataToUse();
+//    	myData10.LoadDataFromCSV("Datas\\table_3_1.csv");	
+//    	Pereceptron_monocouche.UseIt(myData10);
     	
-    	// test 2.11 ADALINE
-    	DataToUse myData9 = new DataToUse();
-    	myData9.LoadDataFromCSV("Datas\\table_2_11.csv");	
-    	Pereceptron_simple.Technique_ADALINE(myData9);
-
+    	// test 3.5 ADALINE (monocouche)
+    	DataToUse myData11 = new DataToUse();
+    	myData11.LoadDataFromCSV("Datas\\table_3_5.csv");	
+    	Pereceptron_monocouche.UseIt(myData11);
+    	
     	
 //    	// test de la JFrame
 //    	Main_Frame frame = new Main_Frame(myData5);
