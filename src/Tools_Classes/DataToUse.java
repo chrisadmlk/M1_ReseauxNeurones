@@ -1,0 +1,80 @@
+package Tools_Classes;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class DataToUse {
+	
+	// classe pour regrouper toutes les infos utiles sur les datas utilisés
+	
+
+	
+	double[][] myData;  // matrice de float de dimensions inconnues
+	int cas;  // correspond au num des tables de data dans le cours
+	int nbColumn, nbLine;
+	
+	
+
+	
+	public void LoadDataFromCSV(String path) {
+		String row;
+		BufferedReader csvReader, csvReaderToCountLine;
+		int i = 0;
+
+		
+		if (path.equals("Datas\\table_2_1.csv")) cas = 201;
+		if (path.equals("Datas\\table_2_3.csv")) cas = 203;
+		else if (path.equals("Datas\\table_2_9.csv")) cas = 209;
+		else if (path.equals("Datas\\table_2_10.csv")) cas = 210;
+		else if (path.equals("Datas\\table_2_11.csv")) cas = 211;
+		else if (path.equals("Datas\\table_3_1.csv")) cas = 301;
+		else if (path.equals("Datas\\table_3_5.csv")) cas = 305;
+		else if (path.equals("Datas\\table_4_12.csv")) cas = 412;
+		else if (path.equals("Datas\\table_4_14.csv")) cas = 414;
+		else if (path.equals("Datas\\table_4_17.csv")) cas = 417;
+		
+		//System.out.println(cas);
+		
+		try {
+			csvReader = new BufferedReader(new FileReader(path));
+			csvReaderToCountLine = new BufferedReader(new FileReader(path));
+			
+			// données nécessaires à l'initialisation du tableau du DataToUse
+			nbColumn = (csvReaderToCountLine.readLine().split(",")).length;
+			nbLine = (int) (csvReaderToCountLine.lines().count() + 1);
+			myData = new double[nbLine][nbColumn];
+			
+			while ((row = csvReader.readLine()) != null) {
+			    String[] data = row.split(",");  //System.out.println(data[0] + data[1] + data[2]);
+			    
+			    for (int j = 0; j < nbColumn; j++) {
+			    	myData[i][j] = Float.parseFloat(data[j]);
+			    }
+			    i++;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	
+	public int GetColNb() {
+		return nbColumn;
+	}
+	
+	public int GetLineNb() {
+		return nbLine;
+	}
+
+	public double GetValueAt(int i, int j) {
+		return myData[i][j];
+	}
+
+	
+	
+}
