@@ -10,6 +10,10 @@ import Tools_Classes.DataToUse;
 
 public class PerceptronSimple {
 
+
+
+
+
     public static void MiseAuPointPorteLogiqueET_2_1(DataToUse myData) {
         // TODO :   aller chercher dans fichier de config
         int nbIterMax = 1000;
@@ -92,46 +96,47 @@ public class PerceptronSimple {
         }
 
         int nbIterMax = Integer.parseInt(prop.getProperty("nbIterMax"));
-        double n = Double.parseDouble(prop.getProperty("n_DG"));        //	facteur de correction
+        double facteurCorrection = Double.parseDouble(prop.getProperty("n_DG"));
         double errLim = Double.parseDouble(prop.getProperty("s_DG"));    //  seuil
 
-        double[] w;                            // vecteur de poids synaptique
-        double[] dw;                        // vecteur des modifications à apporter aux poids synaptiques
-        int k = myData.GetLineNb();        // nb d'exemples à itérer
+        double[] vecteurPoidsSynaptique;
+        // Vecteur des modifications à apporter aux poids synaptiques
+        double[] vecteurModifications;
+        int nbExamplesToIterate = myData.GetLineNb();
         int nbCol = myData.GetColNb();
-        double p = 0;                            // potentiel (ne sert pas ici)
-        double[] y;                            // tableaux des sorties
-        double[] e;                            // tableau d'erreur locales
-        double errMoy;                        // erreur moyenne
+        double[] sorties;
+        double[] erreursLocales;
+        double erreurMoyenne;
 
-        double[] d;                            // 	valeur attendue d du cours = myData.GetValueAt(x, nbCol)
+        // 	Valeur attendue d du cours = myData.GetValueAt(x, nbCol)
+        double[] d;
         int nbIter = 0;
         int nbErreur = 0;
-
-        double[][] x;                        // table des x(i)
+        // Table des x(i)
+        double[][] x;
 
         // initialisation du vecteur de w(i) = 0
-        w = new double[nbCol];
+        vecteurPoidsSynaptique = new double[nbCol];
         for (int i = 0; i < nbCol; i++) {
-            w[i] = 0;
+            vecteurPoidsSynaptique[i] = 0;
         }
 
         // initialisation du vecteur modification de w(i) = 0
-        dw = new double[nbCol];
+        vecteurModifications = new double[nbCol];
         for (int i = 0; i < nbCol; i++) {
-            dw[i] = 0;
+            vecteurModifications[i] = 0;
         }
 
         // initialisation du vecteur de  valeurs attendues
-        d = new double[k];
-        for (int i = 0; i < k; i++) {
+        d = new double[nbExamplesToIterate];
+        for (int i = 0; i < nbExamplesToIterate; i++) {
             d[i] = myData.GetValueAt(i, nbCol - 1);
         }
 
 
         // initialisation du tableau de x(i)              TODO : ceci change dans le cas d'une régression
-        x = new double[k][nbCol];
-        for (int i = 0; i < k; i++) {
+        x = new double[nbExamplesToIterate][nbCol];
+        for (int i = 0; i < nbExamplesToIterate; i++) {
             x[i][0] = 1;
             for (int j = 0; j < nbCol - 1; j++) {
                 x[i][j + 1] = myData.GetValueAt(i, j);
@@ -139,74 +144,63 @@ public class PerceptronSimple {
         }
 
         // initialisation des erreurs locales
-        e = new double[k];
-        for (int i = 0; i < k; i++) {
-            e[i] = 0;
+        erreursLocales = new double[nbExamplesToIterate];
+        for (int i = 0; i < nbExamplesToIterate; i++) {
+            erreursLocales[i] = 0;
         }
 
         // initialisation des sorties
-        y = new double[k];
-        for (int i = 0; i < k; i++) {
-            y[i] = 0;
+        sorties = new double[nbExamplesToIterate];
+        for (int i = 0; i < nbExamplesToIterate; i++) {
+            sorties[i] = 0;
         }
 
-
         do {
-
             // reset des valeurs à resetter
             nbErreur = 0;
             for (int j = 0; j < nbCol; j++) {
-                dw[j] = 0;
+                vecteurModifications[j] = 0;
             }
 
-
-            for (int i = 0; i < k; i++) {
-
+            for (int i = 0; i < nbExamplesToIterate; i++) {
                 // calcul de la sortie
-                y[i] = 0;
+                sorties[i] = 0;
                 for (int j = 0; j < nbCol; j++) {
-                    y[i] = y[i] + w[j] * x[i][j];
-                }   //System.out.println("y("+i+") = " + y[i]);
+                    sorties[i] = sorties[i] + vecteurPoidsSynaptique[j] * x[i][j];
+                }
+                //System.out.println("y("+i+") = " + y[i]);
 
-                // détermination de l'erreur LOCALE
-                e[i] = d[i] - y[i];   //System.out.println( e +" = " + d[i] + " - " + y);
+                // Détermination de l'erreur LOCALE
+                erreursLocales[i] = d[i] - sorties[i];
+                //System.out.println( e +" = " + d[i] + " - " + y);
 
                 // correction des variation de poids synaptiques
                 for (int j = 0; j < nbCol; j++) {
-                    dw[j] = dw[j] + ((float) n * e[i] * x[i][j]);
+                    vecteurModifications[j] = vecteurModifications[j] + ((float) facteurCorrection * erreursLocales[i] * x[i][j]);
                 }
-
             }
 
             // correction des poids synaptiques
             for (int j = 0; j < nbCol; j++) {
-                w[j] = w[j] + dw[j];
+                vecteurPoidsSynaptique[j] = vecteurPoidsSynaptique[j] + vecteurModifications[j];
             }
 
 
-            double[] result = CalculateErrMoy(myData, k, nbCol, y, w, x, d, nbErreur);
-            errMoy = result[0];
+            double[] result = CalculateErrMoy(myData, nbExamplesToIterate, nbCol, sorties, vecteurPoidsSynaptique, x, d, nbErreur);
+            erreurMoyenne = result[0];
             nbErreur = (int) result[1];
 
-
             nbIter++;
-
-
-        } while (!(TestSortieBoucle(myData, nbIter, nbIterMax, errMoy, errLim, nbErreur)));
+        } while (!(TestSortieBoucle(myData, nbIter, nbIterMax, erreurMoyenne, errLim, nbErreur)));
         // TODO Dans le cas d'une classification, cette condition devient :     while(  (nbIter != nbIterMax) && (nbErreur!=0) );
 
-
-        System.out.println(errMoy + "   /   " + errLim);
+        System.out.println(erreurMoyenne + "   /   " + errLim);
         System.out.println("NB Iter = " + nbIter);
 
-        myData.SetLearningResult(nbIter, nbErreur, errMoy, w);
-
+        myData.SetLearningResult(nbIter, nbErreur, erreurMoyenne, vecteurPoidsSynaptique);
     }
 
-
     public static void Technique_ADALINE(DataToUse myData) {
-
-
         InputStream input;
         Properties prop = null;
         try {
@@ -218,46 +212,47 @@ public class PerceptronSimple {
         }
 
         int nbIterMax = Integer.parseInt(prop.getProperty("nbIterMax"));
-        double n = Double.parseDouble(prop.getProperty("n_ADA"));        //	facteur de correction
+        double facteurCorrection = Double.parseDouble(prop.getProperty("n_ADA"));
         double errLim = Double.parseDouble(prop.getProperty("s_ADA"));    //  seuil
 
 
-        double[] w;                        // vecteur de poids synaptique
-        double[] dw;                        // vecteur des modifications à apporter aux poids synaptiques
-        int k = myData.GetLineNb();        // nb d'exemples à itérer
+        double[] vecteurPoidsSynaptique;
+        double[] vecteurModifications;
+        int nbreExamplesToIterate = myData.GetLineNb();
         int nbCol = myData.GetColNb();
-        double p = 0;                        // potentiel (ne sert pas ici)
-        double[] y;                            // tableaux des sorties
-        double[] e;                        // tableau d'erreur locales
-        double errMoy;                        // erreur moyenne
+        double[] sorties;
+        double[] erreursLocales;
+        double erreurMoyenne;
 
-        double[] d;                            // 	valeur attendue d du cours = myData.GetValueAt(x, nbCol)
+        //  Valeur attendue d du cours = myData.GetValueAt(x, nbCol)
+        double[] d;
         int nbIter = 0;
         int nbErreur = 0;
 
-        double[][] x;                        // table des x(i)
+        // table des x(i)
+        double[][] x;
 
         // initialisation du vecteur de w(i) = 0
-        w = new double[nbCol];
+        vecteurPoidsSynaptique = new double[nbCol];
         for (int i = 0; i < nbCol; i++) {
-            w[i] = 0;
+            vecteurPoidsSynaptique[i] = 0;
         }
 
         // initialisation du vecteur modification de w(i) = 0
-        dw = new double[nbCol];
+        vecteurModifications = new double[nbCol];
         for (int i = 0; i < nbCol; i++) {
-            dw[i] = 0;
+            vecteurModifications[i] = 0;
         }
 
         // initialisation du vecteur de  valeurs attendues
-        d = new double[k];
-        for (int i = 0; i < k; i++) {
+        d = new double[nbreExamplesToIterate];
+        for (int i = 0; i < nbreExamplesToIterate; i++) {
             d[i] = myData.GetValueAt(i, nbCol - 1);
         }
 
         // initialisation du tableau de x(i)
-        x = new double[k][nbCol];
-        for (int i = 0; i < k; i++) {
+        x = new double[nbreExamplesToIterate][nbCol];
+        for (int i = 0; i < nbreExamplesToIterate; i++) {
             x[i][0] = 1;
             for (int j = 0; j < nbCol - 1; j++) {
                 x[i][j + 1] = myData.GetValueAt(i, j);
@@ -265,71 +260,60 @@ public class PerceptronSimple {
         }
 
         // initialisation des erreurs locales
-        e = new double[k];
-        for (int i = 0; i < k; i++) {
-            e[i] = 0;
+        erreursLocales = new double[nbreExamplesToIterate];
+        for (int i = 0; i < nbreExamplesToIterate; i++) {
+            erreursLocales[i] = 0;
         }
 
         // initialisation des sorties
-        y = new double[k];
-        for (int i = 0; i < k; i++) {
-            y[i] = 0;
+        sorties = new double[nbreExamplesToIterate];
+        for (int i = 0; i < nbreExamplesToIterate; i++) {
+            sorties[i] = 0;
         }
 
-
         do {
-
             // reset des valeurs à resetter
             nbErreur = 0;
             for (int j = 0; j < nbCol; j++) {
-                dw[j] = 0;
+                vecteurModifications[j] = 0;
             }
 
-
-            for (int i = 0; i < k; i++) {
-
+            for (int i = 0; i < nbreExamplesToIterate; i++) {
                 // calcul de la sortie
-                y[i] = 0;
+                sorties[i] = 0;
                 for (int j = 0; j < nbCol; j++) {
-                    y[i] = y[i] + w[j] * x[i][j];
-                }   //System.out.println("y("+i+") = " + y[i]);
+                    sorties[i] = sorties[i] + vecteurPoidsSynaptique[j] * x[i][j];
+                }
+                //System.out.println("y("+i+") = " + y[i]);
 
                 // détermination de l'erreur LOCALE
-                e[i] = d[i] - y[i];   //System.out.println( e +" = " + d[i] + " - " + y);
+                erreursLocales[i] = d[i] - sorties[i];
+                //System.out.println( e +" = " + d[i] + " - " + y);
 
                 // correction des poids synaptiques
                 for (int j = 0; j < nbCol; j++) {
-                    w[j] = w[j] + ((float) n * e[i] * x[i][j]);
+                    vecteurPoidsSynaptique[j] = vecteurPoidsSynaptique[j] + ((float) facteurCorrection * erreursLocales[i] * x[i][j]);
                 }
-
             }
 
-
             // évalution des sorties puis de l'erreur quadratique
-            double[] result = CalculateErrMoy(myData, k, nbCol, y, w, x, d, nbErreur);
-            errMoy = result[0];
+            double[] result = CalculateErrMoy(myData, nbreExamplesToIterate, nbCol, sorties, vecteurPoidsSynaptique, x, d, nbErreur);
+            erreurMoyenne = result[0];
             nbErreur = (int) result[1];
-
-
             nbIter++;
+        } while (!(TestSortieBoucle(myData, nbIter, nbIterMax, erreurMoyenne, errLim, nbErreur)));
 
-
-        } while (!(TestSortieBoucle(myData, nbIter, nbIterMax, errMoy, errLim, nbErreur)));
-
-
-        System.out.println(errMoy + "   /   " + errLim);
+        System.out.println(erreurMoyenne + "   /   " + errLim);
         System.out.println("NB Iter = " + nbIter);
 
-        myData.SetLearningResult(nbIter, nbErreur, errMoy, w);
-
+        myData.SetLearningResult(nbIter, nbErreur, erreurMoyenne, vecteurPoidsSynaptique);
     }
 
 
     public static boolean TestSortieBoucle(DataToUse myData, int nbIter, int nbIterMax, double errMoy, double errLim, int nbErreur) {
-
         int cas = myData.getCas();
-
-        if ((cas == 211) || (cas == 417) || (cas == 301) || (cas == 305)) {      // Les cas sont ajouté ici en fonction du cours, et non selon une classification logique
+        // Les cas sont ajouté ici en fonction du cours, et non selon une classification logique
+        if ((cas == 211) || (cas == 417) || (cas == 301) || (cas == 305)) {
             if (nbIter == nbIterMax) return true;
             if (errMoy < errLim) return true;
         } else if (cas == 210) {
@@ -339,9 +323,7 @@ public class PerceptronSimple {
             if (nbIter == nbIterMax) return true;
             if (nbErreur == 0) return true;
         }
-
         return false;
-
     }
 
 
@@ -359,7 +341,6 @@ public class PerceptronSimple {
                 }
                 errMoy = errMoy + partialErr * partialErr;
             }
-            errMoy = (errMoy / (2 * k));
         } else {
 
             for (int i = 0; i < k; i++) {
@@ -372,8 +353,8 @@ public class PerceptronSimple {
                 if ((d[i] >= 0) && (y[i] < 0)) nbErreur++;
                 else if ((d[i] < 0) && (y[i] >= 0)) nbErreur++;
             }
-            errMoy = (errMoy / (2 * k));
         }
+        errMoy = (errMoy / (2 * k));
 
         rep[0] = errMoy;
         rep[1] = nbErreur;

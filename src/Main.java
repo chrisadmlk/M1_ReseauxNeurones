@@ -1,10 +1,10 @@
 import GUI.Main_Frame;
 import Perceptrons.PerceptronMonocouche;
-import Perceptrons.Pereceptron_monocouche;
-import Perceptrons.Pereceptron_simple;
+import Perceptrons.PerceptronSimple;
+import Perceptrons.PerceptronMulticouche;
 import Tools_Classes.DataToUse;
 
-public class main
+public class Main
 {
     public static void main(String[] args) {
 
