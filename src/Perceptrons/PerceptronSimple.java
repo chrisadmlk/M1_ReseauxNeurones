@@ -314,16 +314,13 @@ public class PerceptronSimple {
         int cas = myData.getCas();
         // Les cas sont ajouté ici en fonction du cours, et non selon une classification logique
         if ((cas == 211) || (cas == 417) || (cas == 301) || (cas == 305)) {
-            if (nbIter == nbIterMax) return true;
-            if (errMoy < errLim) return true;
+            return nbIter == nbIterMax || errMoy < errLim;
         } else if (cas == 210) {
-            if (nbIter == nbIterMax) return true;
-            if (nbErreur == 3) return true;
+            return nbIter == nbIterMax || nbErreur == 3;
         } else {
-            if (nbIter == nbIterMax) return true;
-            if (nbErreur == 0) return true;
+            return nbIter == nbIterMax || nbErreur == 0;
         }
-        return false;
+        // Modified : requires further testing
     }
 
 
@@ -334,7 +331,6 @@ public class PerceptronSimple {
         double partialErr = 0;
 
         if ((cas == 211) || (cas == 417)) {
-
             for (int i = 0; i < k; i++) {
                 for (int j = 0; j < nbCol - 1; j++) {
                     partialErr = d[i] - w[0] - w[j + 1] * x[i][1];    // TODO : vérifier valeurs

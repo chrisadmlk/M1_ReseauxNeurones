@@ -6,8 +6,8 @@ public class PerceptronMonocouche {
 
 
     public static DataToUse[] DivisionDesDataPargroupe(DataToUse myData) {
-        int nbColX = 0;
-        int nbColD = 0;
+        int nbColX;
+        int nbColD;
 
         if (myData.getCas() == 301) {
             nbColX = 2;
@@ -17,14 +17,11 @@ public class PerceptronMonocouche {
             nbColD = 4;
         }
 
-
         int k = myData.GetLineNb();
         int nbColXPlus = nbColX + 1;
         DataToUse[] dataTable = new DataToUse[nbColD];
 
-
         for (int i = 0; i < nbColD; i++) {
-
             // création d'un objet DataToUse aux bonnes dimensions
             int dataCnt = 0;
             int temp = nbColX + i;
@@ -38,7 +35,6 @@ public class PerceptronMonocouche {
             DataToUse myDataTemp = new DataToUse(myData.getCas(), nbColXPlus, dataCnt);
             myDataTemp.CreateDataTable(dataCnt, nbColXPlus);
 
-
             // population de son tableau de données
             for (int j = 0; j < k; j++) {
                 if (myData.GetValueAt(j, temp) == 1) {
@@ -49,13 +45,10 @@ public class PerceptronMonocouche {
                     cntLine++;
                 }
             }
-
-
             dataTable[i] = myDataTemp;
         }
         return dataTable;
     }
-
 
     public static void UsePerceptrons(DataToUse[] dataDividedByGroup) {
         int nbGroup = dataDividedByGroup.length;
