@@ -18,6 +18,7 @@ public class DataToUse {
 	int nbErr;
 	double errMoy;
 	double[] wFinal;
+<<<<<<< HEAD
 
 	public DataToUse() {}
 	
@@ -26,6 +27,10 @@ public class DataToUse {
 		nbColumn = _nbColumn;
 		nbLine = _nbLine;
 	}
+=======
+	
+
+>>>>>>> parent of d542c39 (Perceptron monocouche OK)
 	
 	public void LoadDataFromCSV(String path) {
 		String row;
@@ -90,10 +95,14 @@ public class DataToUse {
 	}
 	
 	
+<<<<<<< HEAD
 	public void CreateDataTable(int nbLine, int nbCol) {
 		myData = new double[nbLine][nbCol];
 	}
 
+=======
+	
+>>>>>>> parent of d542c39 (Perceptron monocouche OK)
 	public int GetColNb() {
 		return nbColumn;
 	}
@@ -106,9 +115,12 @@ public class DataToUse {
 		return myData[i][j];
 	}
 
+<<<<<<< HEAD
 	public void SetValueAt(int i, int j, double val) {
 		myData[i][j] = val;
 	}
+=======
+>>>>>>> parent of d542c39 (Perceptron monocouche OK)
 	
 	public void SetLearningResult(int _nbIter, int _nbErr, double _errMoy, double[] _wFinal) {
 		nbIter = _nbIter;
