@@ -13,11 +13,10 @@ public class PerceptronSimple {
 
 
 
-
     public static void MiseAuPointPorteLogiqueET_2_1(DataToUse myData) {
         // TODO :   aller chercher dans fichier de config
         int nbIterMax = 1000;
-        double facteurCorrection = 0.012;
+        double facteurCorrection = 1;
 
         double[] vecteurPoidsSynaptique;
         int nbExamplesToIterate = myData.GetLineNb();
@@ -81,8 +80,14 @@ public class PerceptronSimple {
             nbIter++;
         } while ((nbIter != nbIterMax) && (nbErreur != 0));
         System.out.println("NB iter = " + nbIter);
+        
+        myData.SetLearningResult(nbIter, nbErreur, 0, vecteurPoidsSynaptique, facteurCorrection);
     }
 
+    
+    
+    
+    
     public static void Technique_descente_gradient(DataToUse myData) {
 
         InputStream input;
@@ -155,6 +160,9 @@ public class PerceptronSimple {
             sorties[i] = 0;
         }
 
+        
+        System.out.println("$$$$$$$ " + nbCol + " " +nbExamplesToIterate  + " " +myData.getCas() );
+        
         do {
             // reset des valeurs à resetter
             nbErreur = 0;
@@ -168,7 +176,7 @@ public class PerceptronSimple {
                 for (int j = 0; j < nbCol; j++) {
                     sorties[i] = sorties[i] + vecteurPoidsSynaptique[j] * x[i][j];
                 }
-                //System.out.println("y("+i+") = " + y[i]);
+                System.out.println("sorties("+i+") = " + sorties[i]);
 
                 // Détermination de l'erreur LOCALE
                 erreursLocales[i] = d[i] - sorties[i];
@@ -197,9 +205,14 @@ public class PerceptronSimple {
         System.out.println(erreurMoyenne + "   /   " + errLim);
         System.out.println("NB Iter = " + nbIter);
 
-        myData.SetLearningResult(nbIter, nbErreur, erreurMoyenne, vecteurPoidsSynaptique);
+        myData.SetLearningResult(nbIter, nbErreur, erreurMoyenne, vecteurPoidsSynaptique, facteurCorrection);
     }
 
+  
+    
+    
+    
+    
     public static void Technique_ADALINE(DataToUse myData) {
         InputStream input;
         Properties prop = null;
@@ -306,30 +319,51 @@ public class PerceptronSimple {
         System.out.println(erreurMoyenne + "   /   " + errLim);
         System.out.println("NB Iter = " + nbIter);
 
-        myData.SetLearningResult(nbIter, nbErreur, erreurMoyenne, vecteurPoidsSynaptique);
+        myData.SetLearningResult(nbIter, nbErreur, erreurMoyenne, vecteurPoidsSynaptique, facteurCorrection);
     }
 
 
+    
+    
+    
+    
     public static boolean TestSortieBoucle(DataToUse myData, int nbIter, int nbIterMax, double errMoy, double errLim, int nbErreur) {
-        int cas = myData.getCas();
+        int cas = myData.getCas(); 
         // Les cas sont ajouté ici en fonction du cours, et non selon une classification logique
-        if ((cas == 211) || (cas == 417) || (cas == 301) || (cas == 305)) {
-            return nbIter == nbIterMax || errMoy < errLim;
+        if ((cas == 211) ||  (cas == 203) || (cas == 209) ||(cas == 417) || (cas == 301) || (cas == 305)) {
+        	if (nbIter == nbIterMax) return true;
+            if (errMoy < errLim) return true;
+            return false;
+
         } else if (cas == 210) {
-            return nbIter == nbIterMax || nbErreur == 3;
+        	if (nbIter == nbIterMax) return true;
+            if (nbErreur == 3) return true;
+            return false;
         } else {
-            return nbIter == nbIterMax || nbErreur == 0;
+        	if (nbIter == nbIterMax) return true;
+            if (nbErreur == 0) return true;
+            return false;
         }
-        // Modified : requires further testing
+
+
     }
 
 
+    
+    
+    
+    
+    
     public static double[] CalculateErrMoy(DataToUse myData, int k, int nbCol, double y[], double w[], double x[][], double d[], int nbErreur) {
-        int cas = myData.getCas();
+       
+    	int cas = myData.getCas();
         double errMoy = 0;
         double[] rep = new double[2];
         double partialErr = 0;
 
+        
+        System.out.println("ICI  - " + errMoy);
+        
         if ((cas == 211) || (cas == 417)) {
             for (int i = 0; i < k; i++) {
                 for (int j = 0; j < nbCol - 1; j++) {
@@ -337,21 +371,28 @@ public class PerceptronSimple {
                 }
                 errMoy = errMoy + partialErr * partialErr;
             }
-        } else {
+        } 
+        
+        else {
 
-            for (int i = 0; i < k; i++) {
+            for (int i = 0; i < k; i++) { 
+  
                 y[i] = 0;
                 for (int j = 0; j < nbCol; j++) {
                     y[i] = y[i] + w[j] * x[i][j];
                 }
-                errMoy = errMoy + (d[i] - y[i]) * (d[i] - y[i]);
+                errMoy = errMoy + (d[i] - y[i]) * (d[i] - y[i]);		System.out.println("d[i] = " + d[i] + " ///  y[i] = " + y[i]);
 
                 if ((d[i] >= 0) && (y[i] < 0)) nbErreur++;
                 else if ((d[i] < 0) && (y[i] >= 0)) nbErreur++;
             }
+            
+        	System.out.println("ICI  - " + errMoy);
+            
         }
         errMoy = (errMoy / (2 * k));
-
+  
+        
         rep[0] = errMoy;
         rep[1] = nbErreur;
         return rep;

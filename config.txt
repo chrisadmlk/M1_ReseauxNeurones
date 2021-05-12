@@ -1,5 +1,8 @@
-n_DG=0.0011
-n_ADA=0.012
-s_DG=0.125001
-s_ADA=0.1251
-nbIterMax=1000
+n_multi=0.002
+s_multi=0.001
+nbIterMax=200000
+
+n_DG=0.015
+s_DG=0.0001
+n_ADA=0.001
+s_ADA=0.0001
